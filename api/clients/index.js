@@ -37,29 +37,14 @@ module.exports = (req, res) => {
 
   console.log('API called:', req.method, req.url, req.query);
 
-  const { method, query, url } = req;
-
-  // Parse URL to get ID from path like /api/clients/123
-  const urlParts = url.split('/');
-  const clientId = urlParts.length > 3 ? urlParts[3] : query.id;
-
-  console.log('URL parts:', urlParts, 'clientId:', clientId);
+  const { method } = req;
 
   try {
     switch (method) {
       case 'GET':
-        if (clientId) {
-          // Get single client
-          const client = clients.find(c => c.id === parseInt(clientId));
-          if (!client) {
-            return res.status(404).json({ error: 'Client not found' });
-          }
-          return res.status(200).json(client);
-        } else {
-          // Get all clients
-          console.log('Returning clients:', clients);
-          return res.status(200).json(clients);
-        }
+        // Get all clients
+        console.log('Returning clients:', clients);
+        return res.status(200).json(clients);
 
       case 'POST':
         // Create new client
@@ -71,26 +56,8 @@ module.exports = (req, res) => {
         clients.push(newClient);
         return res.status(201).json(newClient);
 
-      case 'PUT':
-        // Update client
-        const clientIndex = clients.findIndex(c => c.id === parseInt(clientId));
-        if (clientIndex === -1) {
-          return res.status(404).json({ error: 'Client not found' });
-        }
-        clients[clientIndex] = { ...clients[clientIndex], ...req.body, id: parseInt(clientId) };
-        return res.status(200).json(clients[clientIndex]);
-
-      case 'DELETE':
-        // Delete client
-        const deleteIndex = clients.findIndex(c => c.id === parseInt(clientId));
-        if (deleteIndex === -1) {
-          return res.status(404).json({ error: 'Client not found' });
-        }
-        clients.splice(deleteIndex, 1);
-        return res.status(200).json({ message: 'Client deleted successfully' });
-
       default:
-        res.setHeader('Allow', ['GET', 'POST', 'PUT', 'DELETE']);
+        res.setHeader('Allow', ['GET', 'POST']);
         return res.status(405).json({ error: `Method ${method} Not Allowed` });
     }
   } catch (error) {
