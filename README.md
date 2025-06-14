@@ -2,6 +2,16 @@
 
 A modern Angular application for managing client data with dynamic forms and comprehensive CRUD operations.
 
+## 🌐 Live Demo
+
+**🚀 [View Live Application](https://client-app-gamma-kohl.vercel.app/)**
+
+Experience the full application functionality including:
+- Client management with CRUD operations
+- Dynamic form engine with real-time validation
+- Advanced filtering and search capabilities
+- Responsive design across all devices
+
 ## 🚀 Features
 
 ### Dynamic Form Engine
@@ -228,23 +238,49 @@ npm run serve:prod
 
 The build artifacts will be stored in the `dist/` directory.
 
+## 🌐 Deployment
+
+### Vercel Deployment (Current Production)
+The application is deployed on Vercel with:
+- **Frontend**: Static Angular build served via CDN
+- **Backend**: Serverless functions for API endpoints
+- **Auto-deployment**: Connected to GitHub for automatic deployments
+
+### Deployment Configuration
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist/client-management-app/browser`
+- **API Functions**: Located in `/api` directory using serverless functions
+- **Environment**: Production environment variables configured in Vercel
+
+### Custom Domain
+The application is accessible at: [https://client-app-gamma-kohl.vercel.app/](https://client-app-gamma-kohl.vercel.app/)
+
 ## 📊 API Endpoints
 
-### Client Management
-- `GET /clients` - Retrieve all clients
-- `GET /clients/:id` - Retrieve specific client
-- `POST /clients` - Create new client
-- `PUT /clients/:id` - Update existing client
-- `DELETE /clients/:id` - Delete client
+### Live API Base URL
+- **Production**: `https://client-app-gamma-kohl.vercel.app/api`
+- **Local Development**: `http://localhost:3000`
 
-### Health Check
-- `GET /health` - Server health status
+### Client Management
+- `GET /api/clients` - Retrieve all clients
+- `GET /api/clients/:id` - Retrieve specific client  
+- `POST /api/clients` - Create new client
+- `PUT /api/clients/:id` - Update existing client
+- `DELETE /api/clients/:id` - Delete client
+
+### Test Endpoint
+- `GET /api/test` - API health status and test response
+
+### Live API Testing
+You can test the live API endpoints directly:
+- **Get all clients**: [https://client-app-gamma-kohl.vercel.app/api/clients](https://client-app-gamma-kohl.vercel.app/api/clients)
+- **Test endpoint**: [https://client-app-gamma-kohl.vercel.app/api/test](https://client-app-gamma-kohl.vercel.app/api/test)
 
 ### Request/Response Examples
 
 #### Get All Clients
 ```bash
-GET /clients
+GET https://client-app-gamma-kohl.vercel.app/api/clients
 ```
 
 Response:
@@ -254,19 +290,28 @@ Response:
     "id": 1,
     "name": "John Doe",
     "email": "john.doe@example.com",
-    "phone": "+1-555-123-4567",
-    "company": "Tech Corp",
-    "address": "123 Main St",
+    "phone": "+1-555-0123",
+    "company": "Tech Solutions Inc.",
     "status": "active",
-    "createdAt": "2024-01-01T00:00:00.000Z",
-    "updatedAt": "2024-01-01T00:00:00.000Z"
+    "address": "123 Main St, Anytown, USA 12345",
+    "notes": "Key decision maker for technology purchases."
+  },
+  {
+    "id": 2,
+    "name": "Jane Smith",
+    "email": "jane.smith@example.com",
+    "phone": "+1-555-0456",
+    "company": "Digital Marketing Pro",
+    "status": "inactive",
+    "address": "456 Oak Ave, Business City, USA 67890",
+    "notes": "Interested in our premium service package."
   }
 ]
 ```
 
 #### Create Client
 ```bash
-POST /clients
+POST https://client-app-gamma-kohl.vercel.app/api/clients
 Content-Type: application/json
 
 {
@@ -275,7 +320,22 @@ Content-Type: application/json
   "phone": "+1-555-987-6543",
   "company": "Design Studio",
   "address": "456 Oak Ave",
-  "status": "active"
+  "status": "active",
+  "notes": "New client interested in our services"
+}
+```
+
+#### Test API Response
+```bash
+GET https://client-app-gamma-kohl.vercel.app/api/test
+```
+
+Response:
+```json
+{
+  "message": "API is working!",
+  "method": "GET",
+  "timestamp": "2024-06-14T12:00:00.000Z"
 }
 ```
 
