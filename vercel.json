@@ -7,16 +7,16 @@
       "config": {
         "distDir": "dist/client-management-app/browser"
       }
+    },
+    {
+      "src": "api/*.js",
+      "use": "@vercel/node"
     }
   ],
   "routes": [
     {
-      "src": "/api/clients/([^/]+)",
-      "dest": "/api/clients?id=$1"
-    },
-    {
-      "src": "/api/clients",
-      "dest": "/api/clients"
+      "src": "/api/(.*)",
+      "dest": "/api/$1"
     },
     {
       "handle": "filesystem"

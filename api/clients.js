@@ -37,14 +37,20 @@ module.exports = (req, res) => {
 
   console.log('API called:', req.method, req.url, req.query);
 
-  const { method, query } = req;
+  const { method, query, url } = req;
+
+  // Parse URL to get ID from path like /api/clients/123
+  const urlParts = url.split('/');
+  const clientId = urlParts.length > 3 ? urlParts[3] : query.id;
+
+  console.log('URL parts:', urlParts, 'clientId:', clientId);
 
   try {
     switch (method) {
       case 'GET':
-        if (query.id) {
+        if (clientId) {
           // Get single client
-          const client = clients.find(c => c.id === parseInt(query.id));
+          const client = clients.find(c => c.id === parseInt(clientId));
           if (!client) {
             return res.status(404).json({ error: 'Client not found' });
           }
@@ -67,16 +73,16 @@ module.exports = (req, res) => {
 
       case 'PUT':
         // Update client
-        const clientIndex = clients.findIndex(c => c.id === parseInt(query.id));
+        const clientIndex = clients.findIndex(c => c.id === parseInt(clientId));
         if (clientIndex === -1) {
           return res.status(404).json({ error: 'Client not found' });
         }
-        clients[clientIndex] = { ...clients[clientIndex], ...req.body, id: parseInt(query.id) };
+        clients[clientIndex] = { ...clients[clientIndex], ...req.body, id: parseInt(clientId) };
         return res.status(200).json(clients[clientIndex]);
 
       case 'DELETE':
         // Delete client
-        const deleteIndex = clients.findIndex(c => c.id === parseInt(query.id));
+        const deleteIndex = clients.findIndex(c => c.id === parseInt(clientId));
         if (deleteIndex === -1) {
           return res.status(404).json({ error: 'Client not found' });
         }
