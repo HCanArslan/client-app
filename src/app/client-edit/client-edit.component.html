@@ -1,0 +1,198 @@
+<div class="client-edit-container">
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading client data...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error-state">
+    <div class="error-icon">⚠️</div>
+    <h3>Failed to Load Client</h3>
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="loadClient()">
+      🔄 Retry
+    </button>
+  </div>
+
+  <!-- Edit Form -->
+  <div *ngIf="!isLoading && !error" class="edit-form-section">
+    <form [formGroup]="editForm" (ngSubmit)="onSubmit()" class="edit-form">
+      
+      <!-- Form Header -->
+      <div class="form-header">
+        <h3>📝 Edit Client Information</h3>
+        <p class="form-subtitle">Update the client details below</p>
+      </div>
+
+      <!-- Form Fields -->
+      <div class="form-grid">
+        
+        <!-- Name Field -->
+        <div class="form-group">
+          <label for="name" class="form-label">
+            <span class="label-text">Full Name</span>
+            <span class="required-indicator">*</span>
+          </label>
+          <input
+            type="text"
+            id="name"
+            formControlName="name"
+            class="form-input"
+            [class.error]="hasFieldError('name')"
+            placeholder="Enter client's full name"
+            autocomplete="name">
+          <div *ngIf="getFieldError('name')" class="error-message">
+            {{ getFieldError('name') }}
+          </div>
+        </div>
+
+        <!-- Email Field -->
+        <div class="form-group">
+          <label for="email" class="form-label">
+            <span class="label-text">Email Address</span>
+            <span class="required-indicator">*</span>
+          </label>
+          <input
+            type="email"
+            id="email"
+            formControlName="email"
+            class="form-input"
+            [class.error]="hasFieldError('email')"
+            placeholder="Enter email address"
+            autocomplete="email">
+          <div *ngIf="getFieldError('email')" class="error-message">
+            {{ getFieldError('email') }}
+          </div>
+        </div>
+
+        <!-- Phone Field -->
+        <div class="form-group">
+          <label for="phone" class="form-label">
+            <span class="label-text">Phone Number</span>
+            <span class="required-indicator">*</span>
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            formControlName="phone"
+            class="form-input"
+            [class.error]="hasFieldError('phone')"
+            placeholder="Enter phone number"
+            autocomplete="tel">
+          <div *ngIf="getFieldError('phone')" class="error-message">
+            {{ getFieldError('phone') }}
+          </div>
+        </div>
+
+        <!-- Company Field -->
+        <div class="form-group">
+          <label for="company" class="form-label">
+            <span class="label-text">Company</span>
+          </label>
+          <input
+            type="text"
+            id="company"
+            formControlName="company"
+            class="form-input"
+            [class.error]="hasFieldError('company')"
+            placeholder="Enter company name (optional)"
+            autocomplete="organization">
+          <div *ngIf="getFieldError('company')" class="error-message">
+            {{ getFieldError('company') }}
+          </div>
+        </div>
+
+        <!-- Status Field -->
+        <div class="form-group">
+          <label for="status" class="form-label">
+            <span class="label-text">Status</span>
+            <span class="required-indicator">*</span>
+          </label>
+          <select
+            id="status"
+            formControlName="status"
+            class="form-select"
+            [class.error]="hasFieldError('status')">
+            <option value="active">Active</option>
+            <option value="inactive">Inactive</option>
+          </select>
+          <div *ngIf="getFieldError('status')" class="error-message">
+            {{ getFieldError('status') }}
+          </div>
+        </div>
+
+        <!-- Address Field (Full Width) -->
+        <div class="form-group full-width">
+          <label for="address" class="form-label">
+            <span class="label-text">Address</span>
+          </label>
+          <textarea
+            id="address"
+            formControlName="address"
+            class="form-textarea"
+            [class.error]="hasFieldError('address')"
+            placeholder="Enter full address (optional)"
+            rows="3"
+            autocomplete="street-address"></textarea>
+          <div *ngIf="getFieldError('address')" class="error-message">
+            {{ getFieldError('address') }}
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Form Actions -->
+      <div class="form-actions">
+        <div class="action-buttons">
+          <button
+            type="button"
+            class="cancel-btn"
+            (click)="onCancel()"
+            [disabled]="isSaving">
+            ❌ Cancel
+          </button>
+          
+          <button
+            type="button"
+            class="reset-btn"
+            (click)="resetForm()"
+            [disabled]="isSaving">
+            🔄 Reset
+          </button>
+          
+          <button
+            type="submit"
+            class="save-btn"
+            [disabled]="editForm.invalid || isSaving">
+            <span *ngIf="!isSaving">💾 Save Changes</span>
+            <span *ngIf="isSaving" class="saving-text">
+              <span class="saving-spinner"></span>
+              Saving...
+            </span>
+          </button>
+        </div>
+
+        <!-- Form Status -->
+        <div class="form-status">
+          <div *ngIf="editForm.invalid && editForm.touched" class="validation-summary">
+            ⚠️ Please fix the errors above before saving
+          </div>
+          <div *ngIf="hasUnsavedChanges()" class="unsaved-changes">
+            📝 You have unsaved changes
+          </div>
+        </div>
+      </div>
+
+      <!-- API Error Display -->
+      <div *ngIf="error" class="api-error">
+        <div class="error-icon">❌</div>
+        <div class="error-content">
+          <h4>Update Failed</h4>
+          <p>{{ error }}</p>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

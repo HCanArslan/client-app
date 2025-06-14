@@ -1,0 +1,28 @@
+<div class="toast-container">
+  <div 
+    *ngFor="let toast of toasts$ | async; trackBy: trackByToastId" 
+    class="toast"
+    [ngClass]="getToastClass(toast.type)">
+    
+    <!-- Toast Icon -->
+    <div class="toast-icon">
+      {{ getToastIcon(toast.type) }}
+    </div>
+
+    <!-- Toast Content -->
+    <div class="toast-content">
+      <div class="toast-title">{{ toast.title }}</div>
+      <div *ngIf="toast.message" class="toast-message">{{ toast.message }}</div>
+    </div>
+
+    <!-- Close Button -->
+    <button 
+      class="toast-close"
+      (click)="removeToast(toast.id)"
+      aria-label="Close notification"
+      title="Close">
+      ✕
+    </button>
+
+  </div>
+</div>

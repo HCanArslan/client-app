@@ -1,0 +1,195 @@
+<div class="client-list-container">
+  <div class="header">
+    <h1>🏢 Client Management</h1>
+    <p class="subtitle">Manage your client database with ease</p>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="loading-state">
+    <div class="spinner"></div>
+    <p>Loading clients...</p>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="error && !isLoading" class="error-state">
+    <div class="error-icon">⚠️</div>
+    <h3>Failed to Load Clients</h3>
+    <p>{{ error }}</p>
+    <button class="retry-btn" (click)="retryLoad()">
+      🔄 Retry
+    </button>
+  </div>
+
+  <!-- Client List -->
+  <div *ngIf="!isLoading && !error" class="clients-section">
+    <div class="section-header">
+      <h2>Client List ({{ filteredClients.length }} of {{ clients.length }})</h2>
+      <div class="header-actions">
+        <button class="filter-toggle-btn" (click)="toggleFilters()" [class.active]="showFilters">
+          🔍 {{ showFilters ? 'Hide' : 'Show' }} Filters
+        </button>
+        <button class="add-btn">
+          ➕ Add New Client
+        </button>
+      </div>
+    </div>
+
+    <!-- Filter Panel -->
+    <div class="filter-panel" [class.show]="showFilters">
+      <form [formGroup]="filterForm" class="filter-form">
+        <div class="filter-row">
+          <div class="filter-group">
+            <label for="nameFilter">🔍 Search by Name, Email, or Company</label>
+            <input 
+              id="nameFilter"
+              type="text" 
+              formControlName="name" 
+              placeholder="Type to search..."
+              class="filter-input">
+          </div>
+        </div>
+        
+        <div class="filter-row">
+          <div class="filter-group">
+            <label class="filter-label">📊 Status Filter</label>
+            <div class="checkbox-group">
+              <label class="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  formControlName="activeOnly"
+                  class="filter-checkbox">
+                <span class="checkbox-text">✅ Active Clients Only</span>
+              </label>
+              <label class="checkbox-label">
+                <input 
+                  type="checkbox" 
+                  formControlName="showInactive"
+                  class="filter-checkbox">
+                <span class="checkbox-text">❌ Inactive Clients Only</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="filter-actions">
+          <div class="filter-summary">
+            <span class="summary-text">{{ getFilterSummary() }}</span>
+          </div>
+          <button 
+            type="button" 
+            class="clear-filters-btn" 
+            (click)="clearFilters()"
+            [disabled]="!hasActiveFilters()">
+            🧹 Clear Filters
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Empty State -->
+    <div *ngIf="filteredClients.length === 0 && clients.length === 0" class="empty-state">
+      <div class="empty-icon">📋</div>
+      <h3>No Clients Found</h3>
+      <p>Start by adding your first client to the database.</p>
+    </div>
+
+    <!-- No Results State (when filters are applied) -->
+    <div *ngIf="filteredClients.length === 0 && clients.length > 0" class="no-results-state">
+      <div class="no-results-icon">🔍</div>
+      <h3>No Clients Match Your Filters</h3>
+      <p>Try adjusting your search criteria or clearing the filters.</p>
+      <button class="clear-filters-btn" (click)="clearFilters()">
+        🧹 Clear All Filters
+      </button>
+    </div>
+
+    <!-- Clients Table -->
+    <div *ngIf="filteredClients.length > 0" class="table-container">
+      <table class="clients-table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Phone</th>
+            <th>Company</th>
+            <th>Status</th>
+            <th>Created</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let client of filteredClients; trackBy: trackByClientId" class="client-row">
+            <td class="id-cell">{{ client.id }}</td>
+            <td class="name-cell">
+              <div class="client-name">{{ client.name }}</div>
+            </td>
+            <td class="email-cell">
+              <a [href]="'mailto:' + client.email" class="email-link">
+                {{ client.email }}
+              </a>
+            </td>
+            <td class="phone-cell">
+              <a [href]="'tel:' + client.phone" class="phone-link">
+                {{ client.phone }}
+              </a>
+            </td>
+            <td class="company-cell">
+              {{ client.company || 'N/A' }}
+            </td>
+            <td class="status-cell">
+              <span class="status-badge" [ngClass]="getStatusClass(client.status)">
+                {{ client.status | titlecase }}
+              </span>
+            </td>
+            <td class="date-cell">
+              {{ formatDate(client.createdAt) }}
+            </td>
+            <td class="actions-cell">
+              <div class="action-buttons">
+                <button 
+                  class="edit-btn" 
+                  (click)="editClient(client)"
+                  title="Edit Client">
+                  ✏️ Edit
+                </button>
+                <button 
+                  class="delete-btn" 
+                  (click)="showDeleteConfirmationDialog(client)"
+                  title="Delete Client">
+                  🗑️ Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Edit Form Modal -->
+  <div *ngIf="showEditForm" class="modal-overlay" (click)="onEditCancelled()">
+    <div class="modal-content" (click)="$event.stopPropagation()">
+      <div class="modal-header">
+        <h2>✏️ Edit Client</h2>
+        <button class="close-btn" (click)="onEditCancelled()">✕</button>
+      </div>
+      <div class="modal-body">
+        <app-client-edit
+          [clientId]="selectedClientId!"
+          (clientUpdated)="onClientUpdated($event)"
+          (editCancelled)="onEditCancelled()">
+        </app-client-edit>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Dialog -->
+  <app-confirmation-dialog
+    [config]="deleteConfirmationConfig"
+    [isVisible]="showDeleteConfirmation"
+    [isProcessing]="isDeleting"
+    (confirmed)="onDeleteConfirmed()"
+    (cancelled)="onDeleteCancelled()">
+  </app-confirmation-dialog>
+</div>

@@ -1,0 +1,40 @@
+<div *ngIf="isVisible" class="confirmation-overlay" (click)="onBackdropClick($event)">
+  <div class="confirmation-dialog" [ngClass]="getTypeClass()">
+    
+    <!-- Dialog Header -->
+    <div class="dialog-header">
+      <div class="dialog-icon">{{ getIcon() }}</div>
+      <h3 class="dialog-title">{{ config.title }}</h3>
+    </div>
+
+    <!-- Dialog Body -->
+    <div class="dialog-body">
+      <p class="dialog-message">{{ config.message }}</p>
+    </div>
+
+    <!-- Dialog Actions -->
+    <div class="dialog-actions">
+      <button 
+        type="button"
+        class="cancel-btn"
+        (click)="onCancel()"
+        [disabled]="isProcessing">
+        {{ config.cancelText || 'Cancel' }}
+      </button>
+      
+      <button 
+        type="button"
+        class="confirm-btn"
+        [ngClass]="getTypeClass()"
+        (click)="onConfirm()"
+        [disabled]="isProcessing">
+        <span *ngIf="!isProcessing">{{ config.confirmText || 'Confirm' }}</span>
+        <span *ngIf="isProcessing" class="processing-text">
+          <span class="spinner"></span>
+          Processing...
+        </span>
+      </button>
+    </div>
+
+  </div>
+</div>

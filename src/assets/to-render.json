@@ -1,0 +1,83 @@
+{
+  "formTitle": "Dynamic Form from JSON",
+  "formDescription": "This form is generated from JSON with field, label, type, hidden, and mandatory properties",
+  "fields": [
+    {
+      "field": "firstName",
+      "label": "First Name",
+      "type": "text",
+      "hidden": "false",
+      "mandatory": "true"
+    },
+    {
+      "field": "lastName",
+      "label": "Last Name",
+      "type": "text",
+      "hidden": "false",
+      "mandatory": "true"
+    },
+    {
+      "field": "email",
+      "label": "Email Address",
+      "type": "email",
+      "hidden": "false",
+      "mandatory": "true"
+    },
+    {
+      "field": "phone",
+      "label": "Phone Number",
+      "type": "text",
+      "hidden": "false",
+      "mandatory": "false"
+    },
+    {
+      "field": "dateOfBirth",
+      "label": "Date of Birth",
+      "type": "date",
+      "hidden": "false",
+      "mandatory": "true"
+    },
+    {
+      "field": "gender",
+      "label": "Gender",
+      "type": "select",
+      "hidden": "false",
+      "mandatory": "false",
+      "options": [
+        { "label": "Male", "value": "male" },
+        { "label": "Female", "value": "female" },
+        { "label": "Other", "value": "other" }
+      ]
+    },
+    {
+      "field": "newsletter",
+      "label": "Subscribe to Newsletter",
+      "type": "checkbox",
+      "hidden": "false",
+      "mandatory": "false"
+    },
+    {
+      "field": "comments",
+      "label": "Additional Comments",
+      "type": "textarea",
+      "hidden": "false",
+      "mandatory": "false"
+    },
+    {
+      "field": "secretField",
+      "label": "Secret Field",
+      "type": "text",
+      "hidden": "true",
+      "mandatory": "false"
+    },
+    {
+      "field": "terms",
+      "label": "I agree to the Terms and Conditions",
+      "type": "checkbox",
+      "hidden": "false",
+      "mandatory": "true"
+    }
+  ],
+  "submitButtonText": "Submit Form",
+  "resetButtonText": "Reset Form"
+} 
