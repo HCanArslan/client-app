@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "buildCommand": "npm run vercel-build",
+  "outputDirectory": "dist/client-management-app/browser",
+  "routes": [
+    {
+      "src": "/api/clients/(.*)",
+      "dest": "/api/clients?id=$1"
+    },
+    {
+      "src": "/api/clients",
+      "dest": "/api/clients"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+} 

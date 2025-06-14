@@ -9,7 +9,8 @@
     "test": "ng test",
     "serve:ssr:client-management-app": "node dist/client-management-app/server/server.mjs",
     "backend": "node server.js",
-    "dev": "concurrently \"npm run backend\" \"npm run start\""
+    "dev": "concurrently \"npm run backend\" \"npm run start\"",
+    "vercel-build": "ng build --configuration production"
   },
   "private": true,
   "dependencies": {

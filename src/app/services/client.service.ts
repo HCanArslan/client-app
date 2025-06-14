@@ -4,6 +4,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { Client, CreateClientRequest, UpdateClientRequest } from '../models/client.model';
+import { environment } from '../../environments/environment';
 
 /**
  * ClientService - Handles HTTP operations for client management
@@ -19,7 +20,7 @@ import { Client, CreateClientRequest, UpdateClientRequest } from '../models/clie
   providedIn: 'root'
 })
 export class ClientService {
-  private readonly baseUrl = 'http://localhost:3000/clients';
+  private readonly baseUrl = `${environment.apiUrl}/clients`;
   private http = inject(HttpClient);
   private platformId = inject(PLATFORM_ID);
 
