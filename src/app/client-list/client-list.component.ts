@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, inject } from '@angular/core';
+import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule, FormBuilder, FormGroup } from '@angular/forms';
 import { ClientService } from '../services/client.service';
@@ -31,6 +31,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
   private clientService = inject(ClientService);
   private toastService = inject(ToastService);
   private fb = inject(FormBuilder);
+  private cdr = inject(ChangeDetectorRef);
 
   // Component state
   clients: Client[] = [];
@@ -124,6 +125,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
           this.clients = clients;
           this.applyFilters();
           this.isLoading = false;
+          this.cdr.markForCheck(); // Trigger change detection
           
           this.logger.info('Clients loaded successfully', {
             count: clients.length,
@@ -134,6 +136,7 @@ export class ClientListComponent implements OnInit, OnDestroy {
         error: (error) => {
           this.isLoading = false;
           this.error = error.message;
+          this.cdr.markForCheck(); // Trigger change detection
           
           this.logger.error('Failed to load clients', {
             error: error.message,
