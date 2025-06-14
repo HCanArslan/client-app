@@ -1,7 +1,14 @@
 {
   "version": 2,
-  "buildCommand": "npm run vercel-build",
-  "outputDirectory": "dist/client-management-app/browser",
+  "builds": [
+    {
+      "src": "package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist/client-management-app/browser"
+      }
+    }
+  ],
   "routes": [
     {
       "src": "/api/clients/(.*)",
@@ -10,6 +17,9 @@
     {
       "src": "/api/clients",
       "dest": "/api/clients"
+    },
+    {
+      "handle": "filesystem"
     },
     {
       "src": "/(.*)",
