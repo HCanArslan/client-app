@@ -24,16 +24,18 @@ let clients = [
 
 let nextId = 3;
 
-export default function handler(req, res) {
+module.exports = (req, res) => {
   // Enable CORS
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  res.setHeader('Content-Type', 'application/json');
 
   if (req.method === 'OPTIONS') {
-    res.status(200).end();
-    return;
+    return res.status(200).end();
   }
+
+  console.log('API called:', req.method, req.url, req.query);
 
   const { method, query } = req;
 
@@ -49,6 +51,7 @@ export default function handler(req, res) {
           return res.status(200).json(client);
         } else {
           // Get all clients
+          console.log('Returning clients:', clients);
           return res.status(200).json(clients);
         }
 
@@ -86,6 +89,6 @@ export default function handler(req, res) {
     }
   } catch (error) {
     console.error('API Error:', error);
-    return res.status(500).json({ error: 'Internal Server Error' });
+    return res.status(500).json({ error: 'Internal Server Error', details: error.message });
   }
-} 
+}; 

@@ -11,7 +11,7 @@
   ],
   "routes": [
     {
-      "src": "/api/clients/(.*)",
+      "src": "/api/clients/([^/]+)",
       "dest": "/api/clients?id=$1"
     },
     {

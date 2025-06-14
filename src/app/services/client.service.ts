@@ -29,7 +29,17 @@ export class ClientService {
    * @returns Observable<Client[]> - Stream of client data
    */
   getClients(): Observable<Client[]> {
-    return this.http.get<Client[]>(this.baseUrl).pipe(
+    this.logInfo('Making API call to:', this.baseUrl);
+    return this.http.get(this.baseUrl, { responseType: 'text' }).pipe(
+      map((response: string) => {
+        this.logInfo('Raw API response:', response);
+        try {
+          return JSON.parse(response) as Client[];
+        } catch (e) {
+          this.logError('Failed to parse JSON response:', { response, error: e });
+          throw new Error('Invalid JSON response from server');
+        }
+      }),
       catchError(this.handleError)
     );
   }
